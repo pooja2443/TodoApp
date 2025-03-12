@@ -1,31 +1,23 @@
-// src/screens/FirstScreen/FirstScreen.tsx
-import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image, useColorScheme, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Toast from 'react-native-toast-message';
 import { ToastConfigParams } from 'react-native-toast-message';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/commonjs/src/types";
 import EmailInput from "@/components/EmailInput/EmailInput";
-import { createTheme } from '@/utils/theme';
+import useTheme from "@/hooks/useTheme";
 
 type Props = {
   navigation: NativeStackNavigationProp<any>;
 }
 
-const FirstScreen = ({ navigation }: Props) => {
+const LoginScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [cheked, setChecked] = useState<boolean>(false);
   const [isPasswordVisibile, setIsPasswordVisible] = useState<boolean>(false);
 
-  const systemColorScheme = useColorScheme(); // get system theme
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(systemColorScheme === 'dark');
-
-  useEffect(() => {
-    setIsDarkMode(systemColorScheme === 'dark');
-  }, [systemColorScheme]);
-
-  const theme = createTheme(isDarkMode);
+  const { isDarkMode, setIsDarkMode, theme } = useTheme();
 
   const toastConfig = {
     customToast: ({ text1 }: ToastConfigParams<any>) => (
@@ -332,4 +324,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FirstScreen;
+export default LoginScreen;

@@ -1,10 +1,9 @@
-// src/screens/AddTask/AddTask.tsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, SafeAreaView, StatusBar, KeyboardAvoidingView, ActivityIndicator, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import axios from 'axios';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { createTheme } from '@/utils/theme';
+import useTheme from '@/hooks/useTheme';
 import { RootStackParamList } from '@/app/(tabs)/index';
 
 const API_KEY = '5588f0a4-62f6-4a17-807a-13db91faf58c';
@@ -16,11 +15,12 @@ export default function AddTask({ route, navigation }: Props) {
   const [description, setDescription] = useState(route.params.description || '');
   const [isLoading, setIsLoading] = useState(false);
   
-  const isDarkMode = route.params.isDarkMode;
+  const initialDarkMode = route.params.isDarkMode;
   const isEditing = route.params.isEditing || false;
   const todoId = route.params.todoId;
 
-  const theme = createTheme(isDarkMode);
+  // Use the custom theme hook instead of createTheme
+  const { theme } = useTheme(initialDarkMode);
 
   const handleSave = async () => {
     if (!description.trim()) {
@@ -66,7 +66,7 @@ export default function AddTask({ route, navigation }: Props) {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.backgroundColor }]}>
-      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      <StatusBar barStyle={theme.textColor === '#fff' ? "light-content" : "dark-content"} />
       
       <View style={[styles.header, { backgroundColor: theme.headerBackground }]}>
         <TouchableOpacity 
@@ -108,7 +108,7 @@ export default function AddTask({ route, navigation }: Props) {
         <TouchableOpacity 
           style={[
             styles.saveButton,
-            { opacity: isLoading ? 0.7 : 1 }
+            { opacity: isLoading ? 0.7 : 1, backgroundColor: theme.buttonBackground }
           ]} 
           onPress={handleSave}
           disabled={isLoading}
@@ -116,7 +116,7 @@ export default function AddTask({ route, navigation }: Props) {
           {isLoading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.saveButtonText}>
+            <Text style={[styles.saveButtonText, { color: theme.buttonText }]}>
               {isEditing ? 'Update Task' : 'Add Task'}
             </Text>
           )}
@@ -161,14 +161,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   saveButton: {
-    backgroundColor: '#3366ff',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
   saveButtonText: {
-    color: '#fff',
     fontWeight: '600',
     fontSize: 16,
   },

@@ -1,11 +1,10 @@
-// src/screens/SecondScreen/SecondScreen.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, SafeAreaView, StatusBar, ActivityIndicator, Alert, useColorScheme, RefreshControl, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, SafeAreaView, StatusBar, ActivityIndicator, Alert, RefreshControl, StyleSheet } from 'react-native';
 import axios from 'axios';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { createTheme } from '@/utils/theme';
+import useTheme from '@/hooks/useTheme';
 import { RootStackParamList, Todo } from '@/app/(tabs)/index';
 
 const API_KEY = '5588f0a4-62f6-4a17-807a-13db91faf58c';
@@ -24,19 +23,10 @@ function SecondScreen({ route, navigation }: Props) {
   const userEmail = route.params.userEmail;
   const name = userEmail.split('@')[0];
 
-  const systemColorScheme = useColorScheme();
-
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(
-    route.params.isDarkMode !== undefined ? route.params.isDarkMode : systemColorScheme === 'dark'
-  );
-
-  useEffect(() => {
-    if (route.params.isDarkMode === undefined) {
-      setIsDarkMode(systemColorScheme === 'dark');
-    }
-  }, [systemColorScheme]);
-
-  const theme = createTheme(isDarkMode);
+  const initialDarkMode = route.params.isDarkMode;
+  
+  // Use the custom theme hook
+  const { isDarkMode, theme } = useTheme(initialDarkMode);
 
   // Fetch Todos
   const fetchTodos = async () => {
@@ -142,7 +132,7 @@ function SecondScreen({ route, navigation }: Props) {
       <View style={styles.headerRow}>
         <View>
           <Text style={[styles.title, { color: theme.textColor }]}>Hey, Welcome Back</Text>
-          <Text style={[styles.subTitle, { color: theme.subtitleColor }]}>{name}</Text>
+          <Text style={[styles.subTitle, { color: theme.secondaryText }]}>{name}</Text>
         </View>
         
         <View style={styles.headerButtons}>
@@ -181,7 +171,7 @@ function SecondScreen({ route, navigation }: Props) {
       {loading ? (
         <ActivityIndicator 
           size="large" 
-          color="#ff7733" 
+          color={theme.buttonBackground} 
           style={styles.loadingIndicator} 
         />
       ) : (
@@ -197,8 +187,8 @@ function SecondScreen({ route, navigation }: Props) {
             <RefreshControl 
               refreshing={refreshing} 
               onRefresh={onRefresh}
-              colors={['#ff7733']}
-              tintColor={isDarkMode ? '#fff' : '#ff7733'}
+              colors={[theme.buttonBackground]}
+              tintColor={isDarkMode ? '#fff' : theme.buttonBackground}
             />
           }
         />
@@ -210,7 +200,6 @@ function SecondScreen({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
     padding: 20
   },
   headerRow: {
@@ -238,12 +227,10 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 18,
     marginBottom: 30,
-    color: "#666"
   },
   header: {
     paddingVertical: 20,
     paddingHorizontal: 15,
-    backgroundColor: 'white',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -256,7 +243,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 15,
     fontWeight: 'bold',
-    color: '#333',
   },
   todoList: {
     marginTop: 20,
@@ -272,7 +258,6 @@ const styles = StyleSheet.create({
   },
   todoText: {
     fontSize: 16,
-    color: '#333',
     flex: 1,
     marginRight: 10,
   },
@@ -284,7 +269,6 @@ const styles = StyleSheet.create({
   },
   emptyListText: {
     textAlign: 'center',
-    color: '#666',
     marginTop: 20,
     fontSize: 16,
   },
