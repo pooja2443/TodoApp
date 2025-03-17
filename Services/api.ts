@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Todo } from "@/Types/types";
+import { Todo } from "@/Types/todoType";
 
 const API_KEY = '5588f0a4-62f6-4a17-807a-13db91faf58c';
 const BASE_URL = 'https://todos.simpleapi.dev/api';

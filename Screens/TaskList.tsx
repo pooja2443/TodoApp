@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import useTheme from '@/hooks/useTheme';
-import { Todo } from '@/Types/types';
+import { Todo } from '@/Types/todoType';
 import { RootStackParamList } from '@/Types/types';
 import { api } from '@/Services/api'
 import { fetchTodoStart, fetchTodoSuccess, fetchTodoFail, removeTodoStart, removeTodoSuccess, removeTodoFail } from '@/Redux/Slice/todoSlice';

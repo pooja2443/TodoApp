@@ -4,7 +4,7 @@ import LoginScreen from '@/Screens/LoginScreen';
 import TaskListScreeen from '@/Screens/TaskList';
 import AddTask from '@/Screens/AddTasks';
 import { NavigationContainer } from '@react-navigation/native';
-import { Todo } from '@/Types/types';
+import { Todo } from '@/Types/todoType';
 import { RootStackParamList } from '@/Types/types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

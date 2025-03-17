@@ -5,7 +5,7 @@ import axios from 'axios';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import useTheme from '@/hooks/useTheme';
 import { RootStackParamList } from '@/Types/types';
-import { Todo } from '@/Types/types';
+import { Todo } from '@/Types/todoType';
 import { api } from '@/Services/api';
 import { addTodoStart, addTodoSuccess, addTodoFail, updateTodoStart, updateTodoSuccess, updateTodoFail } from '@/Redux/Slice/todoSlice';
 import { useDispatch } from 'react-redux';
