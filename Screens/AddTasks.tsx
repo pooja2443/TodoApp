@@ -34,20 +34,16 @@ export default function AddTask({ route, navigation }: Props) {
         // Update existing todo
         await dispatch(updateTodos({ id: todoId, description })).unwrap();
         Alert.alert('Success', 'Task updated successfully');
-        navigation.goBack();
       } else {
         // Add new todo
         await dispatch(addTodos(description)).unwrap();
         Alert.alert('Success', 'Task added successfully');
         setDescription('');
-        navigation.goBack();
       }
-    } catch (error) {
-      console.error('Error saving todo:', error);
-      Alert.alert(
-        'Error', 
+      navigation.goBack();
+    } catch (error: any) {
+      const errorMessage = error?.message || 
         isEditing ? 'Failed to update task' : 'Failed to add task'
-      );  
     } finally {
       setIsLoading(false);
     }
