@@ -6,6 +6,7 @@ import AddTask from '@/Screens/AddTasks';
 import { NavigationContainer } from '@react-navigation/native';
 import { Todo } from '@/Types/todoType';
 import { RootStackParamList } from '@/Types/types';
+import SignUpScreen from '@/Screens/SignUpScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -40,6 +41,13 @@ export default function Navigator() {
           component={AddTask} 
           options={({ route }) => ({
             title: route.params?.isEditing ? 'Edit Task' : 'Add Task',
+          })}
+        />
+          <Stack.Screen 
+          name="SignUp" 
+          component={SignUpScreen} 
+          options={({ route }) => ({
+            title: 'Sign Up',
           })}
         />
       </Stack.Navigator>

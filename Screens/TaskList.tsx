@@ -65,7 +65,8 @@ function TaskListScreen({ route, navigation }: Props) {
       isDarkMode,
       todoId: todo.id,
       description: todo.description,
-      isEditing: true
+      isEditing: true,
+      userEmail: userEmail
     });
   };
 
@@ -73,7 +74,8 @@ function TaskListScreen({ route, navigation }: Props) {
   const addTask = () => {
     navigation.navigate('AddTask', { 
       isDarkMode,
-      isEditing: false 
+      isEditing: false,
+      userEmail: userEmail
     });
   };
 

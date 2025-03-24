@@ -9,7 +9,9 @@ export type RootStackParamList = {
     description?: string;
     isEditing?: boolean;
     isDarkMode: boolean;
+    userEmail: string;
   };
+  SignUp: undefined;
 };
 
 

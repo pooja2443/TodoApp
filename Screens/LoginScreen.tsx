@@ -4,11 +4,13 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Toast from 'react-native-toast-message';
 import { ToastConfigParams } from 'react-native-toast-message';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EmailInput from "@/components/EmailInput/EmailInput";
 import useTheme from "@/hooks/useTheme";
 import { setDarkMode } from "@/Redux/Slice/uiSlice";
 import { RootStackParamList } from "@/Types/types";
+import { signInUser } from "@/Redux/Thunks/authThunk";
+import { RootState } from "@/Redux/Store/store";
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -22,6 +24,7 @@ const LoginScreen = ({ navigation }: Props) => {
   
   const dispatch = useDispatch();
   const { isDarkMode, theme, toggleTheme } = useTheme();
+  const authState = useSelector((state:RootState) => state.auth); //access auth state
 
   const toastConfig = {
     customToast: ({ text1 }: ToastConfigParams<any>) => (
@@ -64,7 +67,7 @@ const LoginScreen = ({ navigation }: Props) => {
     });
   }
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if (!email && !password) {
       showToast('Please fill all fields');
     }
@@ -84,22 +87,30 @@ const LoginScreen = ({ navigation }: Props) => {
       showToast("Invalid Password");
     }
     else {
-      showToast("Sign in successful");
-      
-      // Update dark mode in Redux store
-      dispatch(setDarkMode(isDarkMode));
+      try{
+        const result = await dispatch(signInUser({ email, password })as any);
 
-      setEmail('');
-      setPassword('');
+        if(signInUser.fulfilled.match(result)) {
+          showToast("Sign in successfully");
 
-      // Navigate to the TaskList screen (About)
-      navigation.navigate("About", {
-        userEmail: email,
-        isDarkMode: isDarkMode
-      });
+          dispatch(setDarkMode(isDarkMode));
+
+          setEmail('');
+          setPassword('');
+
+          //navigate to tasklist screen
+          navigation.navigate("About", {
+            userEmail: email,
+            isDarkMode: isDarkMode
+          })
+        }else {
+          showToast(result.payload || 'Sign in failed')
+        }
+      }catch(error) {
+        showToast("An error occurred during sign-in");
+      }
     }
   }
-
   const toggleDarkMode = () => {
     dispatch(setDarkMode(!isDarkMode));
   }
@@ -166,7 +177,7 @@ const LoginScreen = ({ navigation }: Props) => {
           <Text style={[styles.buttonText, { color: theme.buttonText }]}>Sign in</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}> 
           <Text style={[styles.orText, { color: theme.secondaryText }]}>or sign up with</Text>
         </TouchableOpacity>
 
