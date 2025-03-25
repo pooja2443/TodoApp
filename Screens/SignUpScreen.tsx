@@ -11,7 +11,7 @@ import { clearError } from '@/Redux/Slice/authSlice';
 import { RootState, AppDispatch } from '@/Redux/Store/store';
 
 type Props = {
-    navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
+    navigation: NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
 }
 
 export default function SignUpScreen({ navigation }: Props) {

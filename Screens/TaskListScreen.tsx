@@ -15,6 +15,7 @@ type TaskListUIProps = {
   onEditTask: (todo: Todo) => void;
   onDeleteTask: (id: number) => void;
   onRefreshTodos: () => void;
+  onLogout: () => void;
 };
 
 const TaskListScreen = ({ 
@@ -28,7 +29,8 @@ const TaskListScreen = ({
   onAddTask, 
   onEditTask, 
   onDeleteTask,
-  onRefreshTodos
+  onRefreshTodos,
+  onLogout
 }: TaskListUIProps) => {
   
   // Render Todo item
@@ -71,18 +73,25 @@ const TaskListScreen = ({
             <Ionicons name="refresh" size={24} color={theme.iconColor} />
           </TouchableOpacity>
           
-          <TouchableOpacity 
+          {/* <TouchableOpacity 
             style={styles.addTaskButton} 
             onPress={onAddTask}
           >
             <Ionicons name="add-circle" size={24} color={theme.iconColor} />
+          </TouchableOpacity> */}
+
+          <TouchableOpacity
+          onPress={onLogout}
+          style={styles.logoutButton}
+          >
+            <Ionicons name="log-out" size={24} color={theme.iconColor} />
           </TouchableOpacity>
         </View>
       </View>
 
-      <View style={[styles.header, { backgroundColor: theme.cardBackground }]}>
+      {/* <View style={[styles.header, { backgroundColor: theme.cardBackground }]}>
         <Text style={[styles.headerTitle, { color: theme.textColor }]}>Todo List</Text>
-      </View>
+      </View> */}
       
       {isLoading ? (
         <ActivityIndicator 
@@ -109,6 +118,12 @@ const TaskListScreen = ({
           }
         />
       )}
+
+      <TouchableOpacity
+      style={[styles.addTaskButton,{backgroundColor: theme.buttonBackground}]}
+      onPress={onAddTask}>
+        <Text style={[styles.addTaskButtonText, {color: theme.buttonText}]}>Add Tasks</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -132,7 +147,7 @@ const styles = StyleSheet.create({
   refreshButton: {
     padding: 10,
   },
-  addTaskButton: {
+  logoutButton: {
     padding: 10,
   },
   title: {
@@ -193,6 +208,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  addTaskButton: {
+    position: 'absolute',
+    bottom: 50,
+    left: 20,
+    right: 20,
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  addTaskButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  }
 });
 
 export default TaskListScreen;

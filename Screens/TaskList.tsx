@@ -9,13 +9,14 @@ import { Todo } from '@/Types/todoType';
 import { RootStackParamList } from '@/Types/types';
 import useTheme from '@/hooks/useTheme';
 import TaskListUI from '@/Screens/TaskListScreen';
+import { logOutUser } from '@/Redux/Thunks/authThunk';
 
 type Props = {
   route: RouteProp<RootStackParamList, 'About'>;
   navigation: NativeStackNavigationProp<RootStackParamList>;
 };
 
-function TaskListScreen({ route, navigation }: Props) {
+function TaskList({ route, navigation }: Props) {
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -50,13 +51,28 @@ function TaskListScreen({ route, navigation }: Props) {
   };
 
   // Delete Todo
-  const deleteTask = async (id: number) => {
-    try {
-      await dispatch(removeTodos(id)).unwrap();
-    } catch (error) {
-      console.error('Error deleting todo:', error);
-      Alert.alert('Error', 'Failed to delete task');
-    }
+  const deleteTask = (id: number) => {
+    Alert.alert(
+      'Delete Task','Are you sure you want to delete the task',
+      [
+        {
+          text: 'cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () =>{
+            try {
+              await dispatch(removeTodos(id)).unwrap();
+            } catch (error) {
+              console.error('Error deleting todo:', error);
+              Alert.alert('Error', 'Failed to delete task');
+            }
+          }
+        }
+      ]
+    )
   };
 
   // Edit Todo
@@ -76,6 +92,37 @@ function TaskListScreen({ route, navigation }: Props) {
       isEditing: false 
     });
   };
+
+  // logOut handler
+  const handleLogOut = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to log out?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await dispatch(logOutUser()).unwrap();
+              // Navigate to home screen
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Home' }]
+              });
+            } catch (error) {
+              Alert.alert('Logout Error', error instanceof Error ? error.message : 'Logout failed');
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  }
 
   useEffect(() => {
     loadTodos();
@@ -100,8 +147,9 @@ function TaskListScreen({ route, navigation }: Props) {
       onEditTask={editTask}
       onDeleteTask={deleteTask}
       onRefreshTodos={loadTodos}
+      onLogout = {handleLogOut}
     />
   );
 }
 
-export default TaskListScreen;
+export default TaskList;
