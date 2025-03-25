@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { signUpUser, signInUser } from '@/Redux/Thunks/authThunk';
+import { signUpUser, signInUser, logOutUser } from '@/Redux/Thunks/authThunk';
 
 interface AuthState {
   token: string | null;
@@ -34,14 +34,6 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    signout: (state) => {
-        state.token = null;
-        state.name = null;
-        state.email = null;
-        state.isAuthenticated = false;
-
-        AsyncStorage.removeItem('userToken');
-    }
   },
 
   extraReducers: (builder) => {
@@ -79,6 +71,23 @@ const authSlice = createSlice({
         AsyncStorage.setItem('userToken', action.payload.token);
       })
       .addCase(signInUser.rejected,(state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+
+      //signOut
+      .addCase(logOutUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(logOutUser.fulfilled, (state) => {
+        state.isLoading = false;
+        state.token = null;
+        state.name = null;
+        state.email = null;
+        state.isAuthenticated = false;
+      })
+      .addCase(logOutUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

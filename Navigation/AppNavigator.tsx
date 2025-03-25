@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '@/Screens/LoginScreen';
-import TaskListScreeen from '@/Screens/TaskList';
+import TaskList from '@/Screens/TaskList';
 import AddTask from '@/Screens/AddTasks';
 import { NavigationContainer } from '@react-navigation/native';
 import { Todo } from '@/Types/todoType';
@@ -31,7 +31,7 @@ export default function Navigator() {
         />
         <Stack.Screen 
           name="About" 
-          component={TaskListScreeen} 
+          component={TaskList} 
           options={{
             title: 'Todo List',
           }}

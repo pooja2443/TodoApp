@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, isRejectedWithValue } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authService } from '@/Services/authService';
 
@@ -61,4 +61,45 @@ export const signInUser =  createAsyncThunk(
               return rejectWithValue('An error occurred during login');
             }
         }
+)
+
+export const logOutUser = createAsyncThunk(
+    'auth/signOut',
+    async(_, { rejectWithValue, getState }) => {
+        try {
+            const state = getState() as { auth: {token: string | null}}; 
+            const token = state.auth.token;
+
+            if(!token){
+                return rejectWithValue("No authentication token found");
+            }
+
+            // if(response.success) {
+            //     await AsyncStorage.removeItem('userToken');
+            //     return { success: true };
+            // } else {
+            //     return rejectWithValue(response.message || "Logout Failed");
+            // }
+            try{
+                 const response = await authService.signOut(token)
+                  console.log('Logout API Response:', response);
+            }catch(error: any) {
+                if (error.response && error.response.status === 401) {
+                    console.log('401 Error during logout - Token likely already invalid');
+                } else {
+                    throw error;
+                }
+            }
+            await AsyncStorage.removeItem('userToken');
+            return { success: true };
+            
+        } catch (error: any) {
+            console.error('Logout Error:', error);
+            
+            if (error.response && error.response.data) {
+                return rejectWithValue(error.response.data.message || 'Logout failed');
+            }
+            return rejectWithValue("Error occurred during logout");
+        }
+    }
 )

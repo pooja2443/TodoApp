@@ -14,6 +14,11 @@ export interface SignInData{
     password: string;
 }
 
+export interface LogOut{
+    success: boolean;
+    message: string;
+}
+
 const api = axios.create({
     baseURL: BASE_URL,
     params: {
@@ -40,5 +45,13 @@ export const authService = {
     signIn: async (credentials: SignInData): Promise<AuthResponse> => {
         const response = await api.post('/users/login', credentials);
         return response.data;
+    }, 
+    signOut: async (token: string): Promise<LogOut> => {
+        const response = await api.post('/users/logout', {}, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        return response.data
     }
 }
