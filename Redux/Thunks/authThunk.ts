@@ -73,13 +73,7 @@ export const logOutUser = createAsyncThunk(
             if(!token){
                 return rejectWithValue("No authentication token found");
             }
-
-            // if(response.success) {
-            //     await AsyncStorage.removeItem('userToken');
-            //     return { success: true };
-            // } else {
-            //     return rejectWithValue(response.message || "Logout Failed");
-            // }
+            
             try{
                  const response = await authService.signOut(token)
                   console.log('Logout API Response:', response);
