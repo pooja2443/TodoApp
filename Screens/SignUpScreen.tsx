@@ -9,6 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signUpUser } from '@/Redux/Thunks/authThunk';
 import { clearError } from '@/Redux/Slice/authSlice';
 import { RootState, AppDispatch } from '@/Redux/Store/store';
+import EmailInput from '@/components/EmailInput';
+import PasswordInput from '@/components/commonPassInput';
+import CommonButton from '@/components/commonButton';
 
 type Props = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
@@ -130,65 +133,25 @@ export default function SignUpScreen({ navigation }: Props) {
                         />
                     </View>
 
-                    <View style={styles.inputContainer}>
-                        <Text style={[styles.inputLabel, { color: theme.textColor }]}>Email</Text>
-                        <TextInput
-                            style={[styles.input, {
-                                backgroundColor: theme.inputBackground,
-                                color: theme.textColor,
-                                borderColor: theme.borderColor
-                            }]}
-                            placeholder='Email'
-                            placeholderTextColor={theme.secondaryText}
-                            value={email}
-                            onChangeText={setEmail}
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                        />
-                    </View>
+                    <EmailInput
+                        email={email}
+                        setEmail={setEmail}
+                        theme={theme}
+                    />
 
-                    <View style={styles.inputContainer}>
-                        <Text style={[styles.inputLabel, { color: theme.textColor }]}>Password</Text>
-                        <View style={[styles.passwordContainer, {
-                            backgroundColor: theme.inputBackground,
-                            borderColor: theme.borderColor
-                        }]}>
-                            <TextInput
-                                style={[styles.passwordInput, {
-                                    color: theme.textColor
-                                }]}
-                                placeholder='Password'
-                                placeholderTextColor={theme.secondaryText}
-                                value={password}
-                                onChangeText={setPassword}
-                                secureTextEntry={!isPasswordVisible}
-                            />
-                            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.eyeIcon}>
-                                <Ionicons
-                                    name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
-                                    size={24}
-                                    color={theme.textColor}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                    <PasswordInput
+                        password={password}
+                        setPassword={setPassword}
+                        theme={theme}
+                    />
 
-                    <TouchableOpacity
-                        style={[styles.submitButton, { 
-                            backgroundColor: theme.buttonBackground,
-                            opacity: isLoading ? 0.7 : 1 
-                        }]}
+                    <CommonButton
                         onPress={handleSignUp}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? (
-                            <ActivityIndicator color={theme.buttonText} size="small" />
-                        ) : (
-                            <Text style={[styles.submitButtonText, { color: theme.buttonText }]}>
-                                Sign Up
-                            </Text>
-                        )}
-                    </TouchableOpacity>
+                        title="Sign Up"
+                        theme={theme}
+                        style={styles.submitButton}
+                        loading={isLoading}
+                    />
 
                     <View style={styles.loginContainer}>
                         <Text style={{ color: theme.secondaryText }}>Already have an account? </Text>

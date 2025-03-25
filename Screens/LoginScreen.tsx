@@ -5,7 +5,9 @@ import Toast from 'react-native-toast-message';
 import { ToastConfigParams } from 'react-native-toast-message';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useDispatch, useSelector } from 'react-redux';
-import EmailInput from "@/components/EmailInput/EmailInput";
+import EmailInput from "@/components/EmailInput";
+import PasswordInput from "@/components/commonPassInput";
+import CommonButton from "@/components/commonButton";
 import useTheme from "@/hooks/useTheme";
 import { setDarkMode } from "@/Redux/Slice/uiSlice";
 import { RootStackParamList } from "@/Types/types";
@@ -24,7 +26,7 @@ const LoginScreen = ({ navigation }: Props) => {
   
   const dispatch = useDispatch();
   const { isDarkMode, theme, toggleTheme } = useTheme();
-  const authState = useSelector((state:RootState) => state.auth); //access auth state
+  const { isLoading } = useSelector((state:RootState) => state.auth);
 
   const toastConfig = {
     customToast: ({ text1 }: ToastConfigParams<any>) => (
@@ -138,22 +140,11 @@ const LoginScreen = ({ navigation }: Props) => {
           theme={theme}
         />
 
-        <View style={styles.inputContainer}>
-          <Text style={[styles.label, { color: theme.textColor }]}>Password</Text>
-          <View style={[styles.passwordContainer, { borderColor: theme.borderColor, backgroundColor: theme.inputBackground }]}>
-            <TextInput
-              style={[styles.passwordInput, { borderColor: theme.borderColor, backgroundColor: theme.inputBackground, color: theme.textColor }]}
-              value={password}
-              placeholder="Password"
-              placeholderTextColor={theme.secondaryText}
-              onChangeText={setPassword}
-              secureTextEntry={!isPasswordVisible}
-            />
-            <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
-              <FontAwesome name={isPasswordVisible ? "eye" : "eye-slash"} size={18} color={theme.textColor}></FontAwesome>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <PasswordInput
+          password={password}
+          setPassword={setPassword}
+          theme={theme}
+        />
 
         <View style={styles.rememberContainer}>
           <TouchableOpacity
@@ -171,12 +162,13 @@ const LoginScreen = ({ navigation }: Props) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: theme.buttonBackground }]}
-          onPress={handleSignIn}>
-          <Text style={[styles.buttonText, { color: theme.buttonText }]}>Sign in</Text>
-        </TouchableOpacity>
-
+        <CommonButton
+            onPress={handleSignIn}
+            title="Sign Up"
+            theme={theme}
+            style={styles.button}
+            loading={isLoading}
+          />
         <TouchableOpacity onPress={() => navigation.navigate('SignUp')}> 
           <Text style={[styles.orText, { color: theme.secondaryText }]}>or sign up with</Text>
         </TouchableOpacity>
