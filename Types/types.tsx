@@ -10,6 +10,7 @@ export type RootStackParamList = {
     isEditing?: boolean;
     isDarkMode: boolean;
   };
+  SignUp: undefined;
 };
 
 
