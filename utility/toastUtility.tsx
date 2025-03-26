@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Toast, { BaseToast, ToastConfigParams } from 'react-native-toast-message';
 import useTheme from '@/hooks/useTheme';
 
+// Remove the default export since we're making a type parameter explicit
 const useToastConfig = (theme: any) => {
   const customToastConfig = {
     customToast: ({ text1 }: ToastConfigParams<any>) => (
@@ -15,8 +16,8 @@ const useToastConfig = (theme: any) => {
   return customToastConfig;
 };
 
-export const createToastConfig = () => {
-  const { theme } = useTheme();
+export const createToastConfig = (theme: any) => {
+  // Pass the theme directly instead of using useTheme inside the function
   return useToastConfig(theme);
 };
 
