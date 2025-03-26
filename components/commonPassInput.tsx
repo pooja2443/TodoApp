@@ -23,7 +23,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   theme,
   label = "Password",
   placeholder = "Password",
-  minLength = 6,
+  minLength = 8,
   validatePassword = (pass) => pass.length >= minLength
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
