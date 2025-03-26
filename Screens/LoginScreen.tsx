@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Toast from 'react-native-toast-message';
 import { ToastConfigParams } from 'react-native-toast-message';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +12,7 @@ import { setDarkMode } from "@/Redux/Slice/uiSlice";
 import { RootStackParamList } from "@/Types/types";
 import { signInUser } from "@/Redux/Thunks/authThunk";
 import { RootState } from "@/Redux/Store/store";
+import { Toast, createToastConfig, showToast } from "@/utility/toastUtility";
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -28,30 +28,7 @@ const LoginScreen = ({ navigation }: Props) => {
   const { isDarkMode, theme, toggleTheme } = useTheme();
   const { isLoading } = useSelector((state:RootState) => state.auth);
 
-  const toastConfig = {
-    customToast: ({ text1 }: ToastConfigParams<any>) => (
-      <View style={{
-        padding: 16,
-        backgroundColor: theme.toastBackground,
-        borderRadius: 8,
-        marginBottom: 40,
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-      }}>
-        <Text style={{
-          color: theme.toastText,
-          fontSize: 14,
-          textAlign: 'center',
-        }}>{text1}</Text>
-      </View>
-    )
-  } as const;
+  const toastConfig = createToastConfig(theme)
 
   const emailValidation = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

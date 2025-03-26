@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import useTheme from '@/hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
-import Toast, { ToastConfigParams } from 'react-native-toast-message';
+import { ToastConfigParams } from 'react-native-toast-message';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/Types/types";
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import { RootState, AppDispatch } from '@/Redux/Store/store';
 import EmailInput from '@/components/EmailInput';
 import PasswordInput from '@/components/commonPassInput';
 import CommonButton from '@/components/commonButton';
+import { Toast, createToastConfig, showToast } from "@/utility/toastUtility";
 
 type Props = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
@@ -43,30 +44,7 @@ export default function SignUpScreen({ navigation }: Props) {
         }
     }, [error, dispatch]);
 
-    const toastConfig = {
-        customToast: ({ text1 }: ToastConfigParams<any>) => (
-            <View style={{
-                padding: 16,
-                backgroundColor: theme.toastBackground,
-                borderRadius: 8,
-                marginBottom: 40,
-                shadowColor: "#000",
-                shadowOffset: {
-                    width: 0,
-                    height: 2,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3.84,
-                elevation: 5,
-            }}>
-                <Text style={{
-                    color: theme.toastText,
-                    fontSize: 14,
-                    textAlign: 'center',
-                }}>{text1}</Text>
-            </View>
-        )
-    } as const;
+    const toastConfig = createToastConfig(theme)
 
     const togglePasswordVisibility = () => { setIsPasswordVisible(!isPasswordVisible) };
 
