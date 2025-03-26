@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle, GestureResponderEvent } from 'react-native';
 
 interface CommonButtonProps {
-  onPress: (event: GestureResponderEvent) => void;
+  onPress: () => void;
   title: string;
   theme: {
     buttonBackground: string;
