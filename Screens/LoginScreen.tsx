@@ -146,9 +146,12 @@ const LoginScreen = ({ navigation }: Props) => {
             style={styles.button}
             loading={isLoading}
           />
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}> 
-          <Text style={[styles.orText, { color: theme.secondaryText }]}>or sign up with</Text>
-        </TouchableOpacity>
+
+          <View style={styles.registerLinkContainer}>
+            <View style={styles.line} />
+            <Text style={styles.memberText}>or continue with</Text>
+            <View style={styles.line} />
+          </View>
 
         <View style={styles.socialContainer}>
           <TouchableOpacity style={[styles.socialButton, { borderColor: theme.borderColor }]}>
@@ -178,6 +181,19 @@ const LoginScreen = ({ navigation }: Props) => {
               style={styles.socialIcon}
             />
           </TouchableOpacity>
+        </View>
+
+        <View style={styles.registerLinkContainer}>
+            <View>
+              <Text style={[styles.memberText, { color: theme.secondaryText }]}>
+              Not registered? 
+              </Text>
+             </View>
+            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+            <Text 
+              style={[styles.registerNowText, { color: theme.linkColor }]}
+            > Register now</Text>
+            </TouchableOpacity>
         </View>
 
         <View>
@@ -290,7 +306,7 @@ const styles = StyleSheet.create({
   socialContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    marginBottom: 20,
+    marginBottom: 10,
     gap: 20,
   },
   socialButton: {
@@ -312,6 +328,28 @@ const styles = StyleSheet.create({
   },
   link: {
     textDecorationLine: "underline",
+  },
+  registerLinkContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  registerText: {
+    fontSize: 16,
+  },
+  registerNowText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: -10
+  },
+  memberText: {
+    padding: 10
+  },
+  line: {
+    width: 50,
+    height: 1,
+    backgroundColor: '#aaa',
   },
 });
 
