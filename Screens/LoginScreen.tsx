@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from "react-native";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { ToastConfigParams } from 'react-native-toast-message';
@@ -26,7 +26,21 @@ const LoginScreen = ({ navigation }: Props) => {
   
   const dispatch = useDispatch();
   const { isDarkMode, theme, toggleTheme } = useTheme();
-  const { isLoading } = useSelector((state:RootState) => state.auth);
+  const { isLoading, error, isAuthenticated } = useSelector((state:RootState) => state.auth);
+
+  useEffect(() => {
+    if(isAuthenticated){
+      showToast("Signin successful");
+
+      setEmail('');
+
+      setPassword('');
+      navigation.navigate("About",{
+        userEmail: email,
+        isDarkMode: isDarkMode
+      })
+    }
+  })
 
   const toastConfig = createToastConfig(theme)
 
@@ -37,14 +51,6 @@ const LoginScreen = ({ navigation }: Props) => {
 
   const passValidation = (password: string): boolean => (password.length >= 6);
 
-  const showToast = (message: string) => {
-    Toast.show({
-      type: 'customToast',
-      text1: message,
-      position: "bottom",
-      visibilityTime: 2000,
-    });
-  }
 
   const handleSignIn = async () => {
     if (!email && !password) {
@@ -66,28 +72,7 @@ const LoginScreen = ({ navigation }: Props) => {
       showToast("Invalid Password");
     }
     else {
-      try{
-        const result = await dispatch(signInUser({ email, password })as any);
-
-        if(signInUser.fulfilled.match(result)) {
-          showToast("Sign in successfully");
-
-          dispatch(setDarkMode(isDarkMode));
-
-          setEmail('');
-          setPassword('');
-
-          //navigate to tasklist screen
-          navigation.navigate("About", {
-            userEmail: email,
-            isDarkMode: isDarkMode
-          })
-        }else {
-          showToast(result.payload || 'Sign in failed')
-        }
-      }catch(error) {
-        showToast("An error occurred during sign-in");
-      }
+      dispatch(signInUser({ email, password }) as any);
     }
   }
   const toggleDarkMode = () => {
@@ -141,7 +126,7 @@ const LoginScreen = ({ navigation }: Props) => {
 
         <CommonButton
             onPress={handleSignIn}
-            title="Sign Up"
+            title="Sign In"
             theme={theme}
             style={styles.button}
             loading={isLoading}
