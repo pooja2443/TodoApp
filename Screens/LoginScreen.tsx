@@ -44,11 +44,18 @@ const LoginScreen = ({ navigation }: Props) => {
   })
 
   useEffect(() => {
+    return () => {
+      dispatch(clearErrors());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     if (error) {
         showToast(error);
         dispatch(clearErrors());
     }
 }, [error, dispatch]);
+
 
   const toastConfig = createToastConfig(theme)
 
