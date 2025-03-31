@@ -25,7 +25,7 @@ export default function SignUpScreen({ navigation }: Props) {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
-    const { isLoading, error } = useSelector((state: RootState) => state.auth);
+    const { isLoading, error, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
     const { theme } = useTheme();   
 
@@ -43,6 +43,16 @@ export default function SignUpScreen({ navigation }: Props) {
             dispatch(clearError());
         }
     }, [error, dispatch]);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            showToast('Registration successful!');
+            setName('');
+            setEmail('');
+            setPassword('');
+            navigation.navigate('Home');
+        }
+    }, [isAuthenticated, navigation]);
 
     const toastConfig = createToastConfig(theme)
 
@@ -80,14 +90,6 @@ export default function SignUpScreen({ navigation }: Props) {
         
         const userData = { name, email, password };
         dispatch(signUpUser(userData))
-            .unwrap()
-            .then(() => {
-                showToast('Registration successful!');
-                navigation.navigate('Home');
-            })
-            .catch((err) => {
-                // Error will be handled in the useEffect above
-            });
     };
 
     return (

@@ -13,6 +13,7 @@ import { RootStackParamList } from "@/Types/types";
 import { signInUser } from "@/Redux/Thunks/authThunk";
 import { RootState } from "@/Redux/Store/store";
 import { Toast, createToastConfig, showToast } from "@/utility/toastUtility";
+import { clearErrors } from "@/Redux/Slice/todoSlice";
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -41,6 +42,13 @@ const LoginScreen = ({ navigation }: Props) => {
       })
     }
   })
+
+  useEffect(() => {
+    if (error) {
+        showToast(error);
+        dispatch(clearErrors());
+    }
+}, [error, dispatch]);
 
   const toastConfig = createToastConfig(theme)
 

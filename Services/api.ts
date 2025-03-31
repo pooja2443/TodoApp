@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Todo } from "@/Types/todoType";
-const API_KEY = process.env.REACT_APP_API_KEY;
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+import { API_KEY, BASE_URL } from "@env";
+
 export const api = {
     fetchTodos : async () => {
         const response = await axios.get(`${BASE_URL}/todos`, {
