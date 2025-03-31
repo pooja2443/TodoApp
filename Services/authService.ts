@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_KEY = '731c7d72-bebb-4ef6-92df-a75616e32f15';
-const BASE_URL = 'https://todos.simpleapi.dev/api'
+const API_KEY = process.env.REACT_APP_API_KEY;
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export interface SignUpData{
     name: string;
