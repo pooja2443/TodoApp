@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTodos, updateTodos } from '@/Redux/Thunks/todoThunk';
-import { AppDispatch } from '@/Redux/Store/store';
+import { AppDispatch, RootState } from '@/Redux/Store/store';
 import { RootStackParamList } from '@/Types/types';
 import useTheme from '@/hooks/useTheme';
 import AddTaskScreen from '@/Screens/AddTaskScreen';
@@ -15,11 +15,12 @@ export default function AddTask({ route, navigation }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   
   const dispatch = useDispatch<AppDispatch>();
+  const todos = useSelector((state: RootState) => state.todos.todos)
+
   const initialDarkMode = route.params.isDarkMode;
   const isEditing = route.params.isEditing || false;
   const todoId = route.params.todoId;
 
-  // Use the custom theme hook instead of createTheme
   const { theme } = useTheme(initialDarkMode);
 
   const handleSave = async () => {

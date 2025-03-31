@@ -93,7 +93,6 @@ function TaskList({ route, navigation }: Props) {
     });
   };
 
-  // logOut handler
   const handleLogOut = () => {
     Alert.alert(
       'Logout',
@@ -127,7 +126,6 @@ function TaskList({ route, navigation }: Props) {
   useEffect(() => {
     loadTodos();
     
-    // Add listener to refresh todos
     const unsubscribe = navigation.addListener('focus', () => {
       loadTodos();
     });
