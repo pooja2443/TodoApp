@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_KEY = process.env.REACT_APP_API_KEY;
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+const API_KEY = process.env.EXPO_PUBLIC_API_KEY;
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export interface SignUpData{
     name: string;
